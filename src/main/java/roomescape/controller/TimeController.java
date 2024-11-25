@@ -7,10 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import roomescape.model.time.Time;
 import roomescape.model.time.TimeRequest;
 
@@ -26,6 +23,7 @@ public class TimeController {
     public TimeController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @GetMapping("/times")
     @ResponseBody
     public List<Time> getTimes() {
@@ -62,5 +60,11 @@ public class TimeController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/times/" + time.getId())
                 .body(time);
+    }
+
+    @DeleteMapping("/times/{id}")
+    public ResponseEntity<Void> deleteTime(@PathVariable Long id) {
+        String sql = "DELETE FROM time WHERE id = ?";
+        return ResponseEntity.noContent().build();
     }
 }
