@@ -3,15 +3,21 @@ package roomescape.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import roomescape.model.time.Time;
 import roomescape.model.time.TimeRequest;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 public class TimeController {
@@ -19,6 +25,21 @@ public class TimeController {
 
     public TimeController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+    @GetMapping("/times")
+    @ResponseBody
+    public List<Time> getTimes() {
+        String sql = "SELECT * FROM time";
+        return jdbcTemplate.query(sql, new TimeRowMapper());
+    }
+
+    private static class TimeRowMapper implements RowMapper<Time> {
+        @Override
+        public Time mapRow(ResultSet rs,  int rowNum) throws SQLException {
+            Time time = new Time(rs.getString("time"));
+            time.setId(rs.getLong("id"));
+            return time;
+        }
     }
 
     @PostMapping("/times")
