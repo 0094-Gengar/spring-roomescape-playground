@@ -1,4 +1,4 @@
-package roomescape.model;
+package roomescape.model.time;
 
 public class Time {
 
