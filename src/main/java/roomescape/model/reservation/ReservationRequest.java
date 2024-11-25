@@ -1,4 +1,4 @@
-package roomescape.model;
+package roomescape.model.reservation;
 
 public class ReservationRequest {
     private String name;

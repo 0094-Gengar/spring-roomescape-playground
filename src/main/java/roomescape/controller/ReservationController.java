@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import roomescape.model.Reservation;
-import roomescape.model.ReservationRequest;
-import roomescape.model.ReservationService;
+import roomescape.model.reservation.Reservation;
+import roomescape.model.reservation.ReservationRequest;
+import roomescape.model.reservation.ReservationService;
 
 import java.util.List;
 

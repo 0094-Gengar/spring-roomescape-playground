@@ -1,4 +1,4 @@
-package roomescape.model;
+package roomescape.model.reservation;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
