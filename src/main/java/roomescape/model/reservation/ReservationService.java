@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import roomescape.exception.InvalidReservationParameterException;
 import roomescape.exception.NotFoundReservationException;
+import roomescape.model.time.Time;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -29,20 +30,26 @@ public class ReservationService {
     public Reservation addReservation(ReservationRequest reservationRequest) {
         if (reservationRequest.getName() == null || reservationRequest.getName().isEmpty() ||
                 reservationRequest.getDate() == null || reservationRequest.getDate().isEmpty() ||
-                reservationRequest.getTime() == null || reservationRequest.getTime().isEmpty()) {
+                reservationRequest.getTime() == null) {
             throw new InvalidReservationParameterException("예약 내용에 누락된 부분이 있습니다.");
         }
 
-        Reservation reservation = new Reservation(reservationRequest.getName(), reservationRequest.getDate(),reservationRequest.getTime());
+        Time time = reservationRequest.getTime();
 
-        String sql = "INSERT INTO reservation (name,date,time) VALUES (?,?,?)";
+        Reservation reservation = new Reservation(
+                reservationRequest.getName(),
+                reservationRequest.getDate(),
+                time
+        );
+
+        String sql = "INSERT INTO reservation (name,date,time_id) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, reservation.getName());
             ps.setString(2, reservation.getDate());
-            ps.setString(3, reservation.getTime());
+            ps.setLong(3, time.getId());
             return ps;
         }, keyHolder);
 
