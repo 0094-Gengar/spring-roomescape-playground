@@ -34,7 +34,8 @@ public class TimeController {
     private static class TimeRowMapper implements RowMapper<Time> {
         @Override
         public Time mapRow(ResultSet rs,  int rowNum) throws SQLException {
-            Time time = new Time(rs.getString("time"));
+            String timeValue = rs.getString("time");
+            Time time = new Time(timeValue);
             time.setId(rs.getLong("id"));
             return time;
         }
@@ -42,7 +43,8 @@ public class TimeController {
 
     @PostMapping("/times")
     public ResponseEntity<Time> createTimes(@RequestBody TimeRequest timeRequest) {
-        Time time = new Time(timeRequest.getTime());
+        String timeValue = timeRequest.getTime();
+        Time time = new Time(timeValue);
 
         String sql = "INSERT INTO time (time) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
