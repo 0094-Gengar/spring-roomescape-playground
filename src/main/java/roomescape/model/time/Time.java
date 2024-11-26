@@ -1,10 +1,13 @@
 package roomescape.model.time;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class Time {
 
     private Long id;
     private String time;
 
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public Time(String time) {
         this.time = time;
     }
