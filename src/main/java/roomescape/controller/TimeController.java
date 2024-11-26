@@ -44,7 +44,7 @@ public class TimeController {
     @PostMapping("/times")
     public ResponseEntity<Time> createTimes(@RequestBody TimeRequest timeRequest) {
         String timeValue = timeRequest.getTime();
-        Time time = new Time(timeValue);
+        Time time = timeRequest.toTime();
 
         String sql = "INSERT INTO time (time) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
