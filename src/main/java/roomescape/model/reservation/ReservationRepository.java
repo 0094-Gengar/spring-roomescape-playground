@@ -36,7 +36,7 @@ public class ReservationRepository {
         @Override
         public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            Long timeId  = rs.getLong("time_id");
+//            Long timeId  = rs.getLong("time_id");
             String timeValue = rs.getString("time_value");
 
             Time time = new Time(timeValue);

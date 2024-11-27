@@ -170,19 +170,20 @@ public class MissionStepTest {
                 .when().post("/times")
                 .then().log().all()
                 .statusCode(201)
-                .header("Location", "/times/10");
+                .header("Location", "/times/1");
 
         RestAssured.given().log().all()
                 .when().get("/times")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(10));
+                .body("size()", is(1));
 
         RestAssured.given().log().all()
-                .when().delete("/times/10")
+                .when().delete("/times/1")
                 .then().log().all()
                 .statusCode(204);
     }
+
 
     @Test
     void 구단계() {
