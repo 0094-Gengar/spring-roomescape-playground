@@ -34,7 +34,8 @@ public class ReservationService {
             throw new InvalidReservationParameterException("예약 내용에 누락된 부분이 있습니다.");
         }
 
-        Time time = reservationRequest.getTime();
+        Long timeId = reservationRequest.getTime();
+        Time time = findTimeById(timeId);
 
         Reservation reservation = new Reservation(
                 reservationRequest.getName(),
@@ -58,6 +59,14 @@ public class ReservationService {
             reservation.setId(generatedId.longValue());
         }
         return reservation;
+    }
+
+    private Time findTimeById(Long timeId) {
+        String sql = "SELECT id, time FROM time WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Time(
+                rs.getLong("id"),
+                rs.getString("time")
+        ), timeId);
     }
 
     public void deleteReservation(Long id) {
