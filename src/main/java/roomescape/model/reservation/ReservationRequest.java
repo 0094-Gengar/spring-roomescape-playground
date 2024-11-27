@@ -1,13 +1,11 @@
 package roomescape.model.reservation;
 
-import roomescape.model.time.Time;
-
 public class ReservationRequest {
     private String name;
     private String date;
-    private Time time;
+    private Long time;
 
-    public ReservationRequest(String name, String date, Time time) {
+    public ReservationRequest(String name, String date, Long time) {
         this.name = name;
         this.date = date;
         this.time = time;
@@ -21,7 +19,7 @@ public class ReservationRequest {
         return date;
     }
 
-    public Time getTime() {
+    public Long getTime() {
         return time;
     }
 }
