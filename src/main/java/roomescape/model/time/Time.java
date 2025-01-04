@@ -3,13 +3,10 @@ package roomescape.model.time;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Time {
+public class Time { // 도메인-비즈니스에 관련이 있는 경우 이름을 time 으로 해도 좋지만, 데이터베이스와 접근하기 때문에 ReservationTime 으로 고려하기
 
     private Long id;
     private String time;
-
-    public Time() {
-    }
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public Time(@JsonProperty("time") String time) {

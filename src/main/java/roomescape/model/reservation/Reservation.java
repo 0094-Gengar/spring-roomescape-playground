@@ -2,6 +2,7 @@ package roomescape.model.reservation;
 
 import roomescape.model.time.Time;
 
+// 예약 관련 데이터베이스 엔티티
 public class Reservation {
 
     private Long id;
@@ -33,10 +34,6 @@ public class Reservation {
 
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public Time getTime() {
