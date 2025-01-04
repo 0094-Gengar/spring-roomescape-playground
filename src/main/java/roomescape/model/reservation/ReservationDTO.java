@@ -1,11 +1,11 @@
 package roomescape.model.reservation;
 
-public class ReservationRequest {
+public class ReservationDTO {
     private String name;
     private String date;
     private Long time;
 
-    public ReservationRequest(String name, String date, Long time) {
+    public ReservationDTO(String name, String date, Long time) {
         this.name = name;
         this.date = date;
         this.time = time;

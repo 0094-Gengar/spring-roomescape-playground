@@ -15,31 +15,31 @@ import java.util.List;
 @Service
 public class ReservationService {
     private final JdbcTemplate jdbcTemplate;
-    private final ReservationRepository reservationRepository;
+    private final ReservationDAO reservationDAO;
 
     @Autowired
-    public ReservationService(JdbcTemplate jdbcTemplate, ReservationRepository reservationRepository) {
+    public ReservationService(JdbcTemplate jdbcTemplate, ReservationDAO reservationDAO) {
         this.jdbcTemplate = jdbcTemplate;
-        this.reservationRepository = reservationRepository;
+        this.reservationDAO = reservationDAO;
     }
 
     public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+        return reservationDAO.findAll();
     }
 
-    public Reservation addReservation(ReservationRequest reservationRequest) {
-        if (reservationRequest.getName() == null || reservationRequest.getName().isEmpty() ||
-                reservationRequest.getDate() == null || reservationRequest.getDate().isEmpty() ||
-                reservationRequest.getTime() == null) {
+    public Reservation addReservation(ReservationDTO reservationDTO) {
+        if (reservationDTO.getName() == null || reservationDTO.getName().isEmpty() ||
+                reservationDTO.getDate() == null || reservationDTO.getDate().isEmpty() ||
+                reservationDTO.getTime() == null) {
             throw new InvalidReservationParameterException("예약 내용에 누락된 부분이 있습니다.");
         }
 
-        Long timeId = reservationRequest.getTime();
+        Long timeId = reservationDTO.getTime();
         Time time = findTimeById(timeId);
 
         Reservation reservation = new Reservation(
-                reservationRequest.getName(),
-                reservationRequest.getDate(),
+                reservationDTO.getName(),
+                reservationDTO.getDate(),
                 time
         );
 
@@ -70,7 +70,7 @@ public class ReservationService {
     }
 
     public void deleteReservation(Long id) {
-        int rowAffected = reservationRepository.deleteById(id);
+        int rowAffected = reservationDAO.deleteById(id);
         if (rowAffected == 0) {
             throw new NotFoundReservationException("삭제하려는 예약이 없습니다.");
         }

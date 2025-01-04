@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class ReservationRepository {
+public class ReservationDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    public ReservationRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -36,7 +36,6 @@ public class ReservationRepository {
         @Override
         public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-//            Long timeId  = rs.getLong("time_id");
             String timeValue = rs.getString("time_value");
 
             Time time = new Time(timeValue);
