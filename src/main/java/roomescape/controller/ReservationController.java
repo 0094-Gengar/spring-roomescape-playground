@@ -13,7 +13,7 @@ import java.util.List;
 @Controller
 public class ReservationController {
 
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
@@ -31,9 +31,9 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationDTO reservationRequest) {
-        Reservation reservation = reservationService.addReservation(reservationRequest);
-        return ResponseEntity.status(HttpStatus.CREATED) // status: 201
+    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationDTO reservationDTO) {
+        Reservation reservation = reservationService.addReservation(reservationDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/reservations/" + reservation.getId())
                 .body(reservation);
     }

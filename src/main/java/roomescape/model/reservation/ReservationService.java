@@ -1,6 +1,5 @@
 package roomescape.model.reservation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 import roomescape.exception.InvalidReservationParameterException;
 import roomescape.exception.NotFoundReservationException;
 import roomescape.model.time.Time;
+import roomescape.model.time.TimeService;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -16,11 +16,12 @@ import java.util.List;
 public class ReservationService {
     private final JdbcTemplate jdbcTemplate;
     private final ReservationDAO reservationDAO;
+    private final TimeService timeService;
 
-    @Autowired
-    public ReservationService(JdbcTemplate jdbcTemplate, ReservationDAO reservationDAO) {
+    public ReservationService(JdbcTemplate jdbcTemplate, ReservationDAO reservationDAO, TimeService timeService) {
         this.jdbcTemplate = jdbcTemplate;
         this.reservationDAO = reservationDAO;
+        this.timeService = timeService;
     }
 
     public List<Reservation> getAllReservations() {
@@ -30,12 +31,12 @@ public class ReservationService {
     public Reservation addReservation(ReservationDTO reservationDTO) {
         if (reservationDTO.getName() == null || reservationDTO.getName().isEmpty() ||
                 reservationDTO.getDate() == null || reservationDTO.getDate().isEmpty() ||
-                reservationDTO.getTime() == null) {
+                reservationDTO.getTimeId() == null) {
             throw new InvalidReservationParameterException("예약 내용에 누락된 부분이 있습니다.");
         }
 
-        Long timeId = reservationDTO.getTime();
-        Time time = findTimeById(timeId);
+        Long timeId = reservationDTO.getTimeId();
+        Time time = timeService.findTimeById(timeId);
 
         Reservation reservation = new Reservation(
                 reservationDTO.getName(),
@@ -43,7 +44,7 @@ public class ReservationService {
                 time
         );
 
-        String sql = "INSERT INTO reservation (name,date,time_id) VALUES (?,?,?)";
+        String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -61,18 +62,10 @@ public class ReservationService {
         return reservation;
     }
 
-    private Time findTimeById(Long timeId) {
-        String sql = "SELECT id, time FROM time WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Time(
-                rs.getLong("id"),
-                rs.getString("time")
-        ), timeId);
-    }
-
     public void deleteReservation(Long id) {
         int rowAffected = reservationDAO.deleteById(id);
         if (rowAffected == 0) {
-            throw new NotFoundReservationException("삭제하려는 예약이 없습니다.");
+            throw new NotFoundReservationException("삭제하려는 예약이 존재하지 않습니다.");
         }
     }
 }

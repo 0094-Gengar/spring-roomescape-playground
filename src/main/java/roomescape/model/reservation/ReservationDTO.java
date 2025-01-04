@@ -1,14 +1,18 @@
 package roomescape.model.reservation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ReservationDTO {
     private String name;
     private String date;
-    private Long time;
 
-    public ReservationDTO(String name, String date, Long time) {
+    @JsonProperty("time")
+    private Long timeId;
+
+    public ReservationDTO(String name, String date, Long timeId) {
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
     }
 
     public String getName() {
@@ -19,7 +23,7 @@ public class ReservationDTO {
         return date;
     }
 
-    public Long getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
     }
 }
